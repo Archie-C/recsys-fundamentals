@@ -25,8 +25,8 @@
 1. Clone the Repo
 
     ```bash
-    git clone <>
-    cd 
+    git clone <https://github.com/Archie-C/recsys-fundamentals>
+    cd recsys-fundamentals
     ```
 2. Create & active venv
     ```bash
