@@ -54,3 +54,7 @@ This runs `get_data.py`, which:
 make test
 ```
 Runs `pytest` (via your venv) and ensures data sanity and code correctness
+
+# Fundamental Mathematics
+
+[Singular Value Decomposition](https://cookie-aura-4c6.notion.site/Singular-Value-Decomposition-in-Recommender-Systems-223acccb70f1808d8724c6f74cc6b7b1)
