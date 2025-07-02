@@ -44,6 +44,12 @@ mask = ~np.isnan(pred)
 rmse = np.sqrt(mean_squared_error(act[mask], pred[mask]))
 mae = mean_absolute_error(act[mask], pred[mask])
 
+# With default settings
+# Evaluated 19968 of 20000 test cases (skipped 32 due to cold-starts)
+# User-based kNN (cosine_similarity, k=10)
+# RMSE: 1.0452
+# MAE : 0.8282
+
 print(f"Evaluated {mask.sum()} of {len(pred)} test cases (skipped {skipped} due to cold-starts)")
 print(f"User-based kNN ({similarity_func.__name__}, k={k})")
 print(f"RMSE: {rmse:.4f}")
