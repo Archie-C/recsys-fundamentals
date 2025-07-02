@@ -60,3 +60,5 @@ Runs `pytest` (via your venv) and ensures data sanity and code correctness
 [Singular Value Decomposition](https://cookie-aura-4c6.notion.site/Singular-Value-Decomposition-in-Recommender-Systems-223acccb70f1808d8724c6f74cc6b7b1)
 
 [Basic kNN](https://cookie-aura-4c6.notion.site/K-Nearest-Neighbours-in-Recommender-Systems-224acccb70f1802badbec27c131b0689?pvs=73)
+
+[Matrix Factorising and ALS](https://cookie-aura-4c6.notion.site/Matrix-Factorising-and-Alternating-Least-Squares-ALS-224acccb70f18040b7c1c5312128a01f?pvs=73)
