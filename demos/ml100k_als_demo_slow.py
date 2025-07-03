@@ -10,24 +10,15 @@ from scipy import sparse
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 
 from src.als import train_simple_explicit_als
+from src.utils.data_loading import load_split
+from src.metrics.evaluate import evaluate_XY
 
-train = pd.read_csv("data/raw/ml-100k/u1.base", sep="\t", names=["user_id", "item_id", "rating", "timestamp"])
-test = pd.read_csv("data/raw/ml-100k/u1.test", sep="\t", names=["user_id", "item_id", "rating", "timestamp"])
-
-n_users = max(train.user_id.max(), test.user_id.max())
-n_items = max(train.item_id.max(), test.item_id.max())
-
-rows = train.user_id.values - 1
-cols = train.item_id.values - 1
-global_mean = train.rating.mean()
-data = train.rating.values - global_mean
-R = sparse.coo_matrix((data, (rows, cols)),
-                      shape=(n_users, n_items)).tocsr()
+R_train, R_test, n_users, n_items, train, test, global_mean = load_split("data/raw/ml-100k/u1.base", "data/raw/ml-100k/u1.test", mean_centered=True)
 
 k = 30
 lam = 0.05
 n_iter = 12
-X, Y = train_simple_explicit_als(R, k=k, lam=lam, n_iter=n_iter, seed=42)
+X, Y = train_simple_explicit_als(R_train, k=k, lam=lam, n_iter=n_iter, seed=42)
 
 predictions, actuals = [], []
 skipped = 0
@@ -49,6 +40,7 @@ mask = ~np.isnan(pred)
 
 rmse = np.sqrt(mean_squared_error(act[mask], pred[mask]))
 mae  = mean_absolute_error(act[mask], pred[mask])
+metrics = evaluate_XY(R_train, R_test, X, Y, k=10)
 
 elapsed = time.perf_counter() - t0
 
@@ -64,3 +56,4 @@ print(f"Evaluated {mask.sum()} of {len(pred)} test cases (skipped {skipped})")
 print(f"Explicit ALS (k={k}, λ={lam}, iters={n_iter})")
 print(f"RMSE: {rmse:.4f}")
 print(f"MAE : {mae:.4f}")
+print(metrics)
