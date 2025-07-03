@@ -1,3 +1,5 @@
+[![CI](https://github.com/Archie-C/recsys-fundamentals/actions/workflows/python-test.yaml/badge.svg)](https://github.com/Archie-C/recsys-fundamentals/actions/workflows/python-test.yaml)
+
 # Recsys Sprint
 
 **A 14-day hands-on sprint for building and evaluating recommender-system baselines.**
