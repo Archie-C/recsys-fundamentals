@@ -64,3 +64,5 @@ Runs `pytest` (via your venv) and ensures data sanity and code correctness
 [Basic kNN](https://cookie-aura-4c6.notion.site/K-Nearest-Neighbours-in-Recommender-Systems-224acccb70f1802badbec27c131b0689?pvs=73)
 
 [Matrix Factorising and ALS](https://cookie-aura-4c6.notion.site/Matrix-Factorising-and-Alternating-Least-Squares-ALS-224acccb70f18040b7c1c5312128a01f?pvs=73)
+
+[Statistical Tests](https://cookie-aura-4c6.notion.site/Statistical-Tests-in-Recommender-Systems-225acccb70f180b693b3d0716e3162a0?pvs=73)
