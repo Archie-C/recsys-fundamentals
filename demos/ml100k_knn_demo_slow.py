@@ -1,3 +1,6 @@
+import time
+t0 = time.perf_counter()
+
 import sys
 import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -44,12 +47,16 @@ mask = ~np.isnan(pred)
 rmse = np.sqrt(mean_squared_error(act[mask], pred[mask]))
 mae = mean_absolute_error(act[mask], pred[mask])
 
+elapsed = time.perf_counter() - t0
+
 # With default settings
+# Computation time: 60.48 s
 # Evaluated 19968 of 20000 test cases (skipped 32 due to cold-starts)
 # User-based kNN (cosine_similarity, k=10)
 # RMSE: 1.0452
 # MAE : 0.8282
 
+print(f"Computation time: {elapsed:.2f} s")
 print(f"Evaluated {mask.sum()} of {len(pred)} test cases (skipped {skipped} due to cold-starts)")
 print(f"User-based kNN ({similarity_func.__name__}, k={k})")
 print(f"RMSE: {rmse:.4f}")
