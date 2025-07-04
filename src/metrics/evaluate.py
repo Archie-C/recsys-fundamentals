@@ -1,5 +1,5 @@
 import numpy as np
-from scipy import sparse
+from scipy.sparse import csr_matrix
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 import math
 
@@ -22,6 +22,27 @@ def topk_preds(R_train, X, Y, k):
         preds.append(topk.tolist())
     return preds
 
+
+def topk_preds_biased(R_train: csr_matrix,
+                     mu: float,
+                     bu: np.ndarray,
+                     bi: np.ndarray,
+                     X: np.ndarray,
+                     Y: np.ndarray,
+                     k: int):
+
+    m, n = R_train.shape
+    scores = X @ Y.T
+    scores = mu + bu[:, None] + bi[None, :] + scores
+    mask = (R_train > 0).toarray()   # True where user already rated
+    scores[mask] = -np.inf
+    topk = np.argpartition(-scores, k, axis=1)[:, :k]
+    topk_sorted = np.vstack([
+        topk[u][np.argsort(-scores[u, topk[u]])]
+        for u in range(m)
+    ])
+    return topk_sorted
+
 def _ground_truth(R_test):
     m, _ = R_test.shape
     out = []
@@ -40,8 +61,11 @@ def evaluate(predicted, ground_truth, k, n_items):
         "item_coverage":   item_coverage(predicted, n_items),
     }
 
-def evaluate_XY(R_train, R_test, X, Y, k=10):
-    preds = topk_preds(R_train, X, Y, k)
+def evaluate_XY(R_train, R_test, X, Y, k=10, biased=False, bu=None, bi=None, mu=0.0):
+    if biased:
+        preds = topk_preds_biased(R_train, mu, bu, bi, X, Y, k)
+    else:
+        preds = topk_preds(R_train, X, Y, k)
     truth = _ground_truth(R_test)
     n_items = Y.shape[0]
 
@@ -53,6 +77,7 @@ def evaluate_XY(R_train, R_test, X, Y, k=10):
         "user_coverage": user_coverage(preds),
         "item_coverage": item_coverage(preds, n_items),
     }
+
 
 def evaluate_content_all_metrics(user_profiles, R_test, items, item_cols, k=10, rating_min=1, rating_max=5):
     # 1) compute profiles

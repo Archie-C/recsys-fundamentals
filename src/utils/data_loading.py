@@ -25,8 +25,13 @@ def load_split(base_path, test_path, mean_centered=False):
     n_users = max(train.user_id.max(), test.user_id.max())
     n_items = max(train.item_id.max(), test.item_id.max())
 
-    R_train, global_mean = df_to_csr(train, n_users, n_items, mean_centered=mean_centered)
-    R_test, _ = df_to_csr(test, n_users, n_items, mean_centered=mean_centered)
+    if mean_centered:
+        R_train, global_mean = df_to_csr(train, n_users, n_items, mean_centered=mean_centered)
+        R_test, _ = df_to_csr(test, n_users, n_items, mean_centered=mean_centered)
+    else:
+        R_train = df_to_csr(train, n_users, n_items, mean_centered=mean_centered)
+        R_test = df_to_csr(test, n_users, n_items, mean_centered=mean_centered)
+        global_mean = None
 
     return R_train, R_test, n_users, n_items, train, test, global_mean
 

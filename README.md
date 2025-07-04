@@ -57,6 +57,21 @@ make test
 ```
 Runs `pytest` (via your venv) and ensures data sanity and code correctness
 
+# Results
+
+### CF vs Hybrid
+Below are the ranking metrics comparing pure ALS vs. the hybrid CF+genre model (with optimal α).
+
+| Model              | α    | HR@10   | NDCG@10  | Item Coverage |
+|--------------------|------|---------|----------|---------------|
+| Pure ALS           | —    | 0.0976  | 0.0471   | 0.289         |
+| Hybrid (genres)    | 0.1 | 0.2333  | 0.1272   | 0.408         |
+
+* α = weight on CF score (1 = pure CF, 0 = pure content).  
+* Metrics computed on the ML-100K test split, k=10 recommendations.
+
+**Runtime:** CF only: ~2.4 s | Hybrid: ~3.0 s
+
 # Fundamental Mathematics
 
 [Singular Value Decomposition](https://cookie-aura-4c6.notion.site/Singular-Value-Decomposition-in-Recommender-Systems-223acccb70f1808d8724c6f74cc6b7b1)
@@ -66,3 +81,5 @@ Runs `pytest` (via your venv) and ensures data sanity and code correctness
 [Matrix Factorising and ALS](https://cookie-aura-4c6.notion.site/Matrix-Factorising-and-Alternating-Least-Squares-ALS-224acccb70f18040b7c1c5312128a01f?pvs=73)
 
 [Statistical Tests](https://cookie-aura-4c6.notion.site/Statistical-Tests-in-Recommender-Systems-225acccb70f180b693b3d0716e3162a0?pvs=73)
+
+[Linear and Logistic Regression](https://cookie-aura-4c6.notion.site/Linear-and-Logistic-Regression-226acccb70f180a19ca4eeede46ac5ca?pvs=73)
