@@ -1,5 +1,8 @@
 import numpy as np
 from scipy import sparse
+from sklearn.metrics import mean_squared_error, mean_absolute_error
+import math
+
 from src.metrics.metrics import hr_at_k, item_coverage, ndcg_at_k, precision_at_k, recall_at_k, user_coverage
 
 
@@ -50,3 +53,34 @@ def evaluate_XY(R_train, R_test, X, Y, k=10):
         "user_coverage": user_coverage(preds),
         "item_coverage": item_coverage(preds, n_items),
     }
+
+def evaluate_content_all_metrics(user_profiles, R_test, items, item_cols, k=10, rating_min=1, rating_max=5):
+    # 1) compute profiles
+    P = user_profiles[item_cols].values
+    X = items[item_cols].values
+
+    # 2) normalize for cosine
+    norms = np.linalg.norm(P, axis=1, keepdims=True)   # shape (n_users, 1)
+    norms[norms == 0] = 1                               # avoid division by zero
+    P_norm = P / norms
+    item_norms = np.linalg.norm(X, axis=1, keepdims=True)
+    item_norms[item_norms == 0] = 1
+    X_norm = X / item_norms
+
+    # 3) predicted rating matrix
+    sim = P_norm.dot(X_norm.T)  # in [-1,1]
+    preds = (sim + 1) / 2 * (rating_max - rating_min) + rating_min
+
+    # 4) rating metrics
+    u_idx, i_idx = R_test.nonzero()
+    y_true = R_test.data
+    y_pred = preds[u_idx, i_idx]
+    rmse = np.sqrt(mean_squared_error(y_true, y_pred))
+    mae = mean_absolute_error(y_true, y_pred)
+
+    metrics = {
+        'RMSE': rmse,
+        'MAE': mae,
+
+    }
+    return metrics
